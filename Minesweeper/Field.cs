@@ -18,8 +18,8 @@ namespace Minesweeper
         private List <(int, int)> FlagCoordinates   { get; }
         private List <(int, int)> OpenedCoordinates { get; }
         private List <(int, int)> CheckedFields     { get; }
-        public int               SizeX             { get; }
-        public int               SizeY             { get; }
+        public  int               SizeX             { get; }
+        public  int               SizeY             { get; }
 
         public Field (int x, int y, double threshold)
         {
@@ -38,20 +38,11 @@ namespace Minesweeper
             SizeY = y;
         }
 
-        /// <summary>
-        /// Returns 0 for empty field, -1 for bomb, -2 if the field was already open and anything else as the close bomb count
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="mainWindow"></param>
-        /// <param name="sender"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public int OpenField (int x, int y, MainWindow mainWindow)
+        public LeftResult OpenField (int x, int y, MainWindow mainWindow)
         {
             if (OpenedCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y) ||
                 FlagCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y))
-                return -2;
+                return LeftResult.AlreadyOpen;
 
             var count = GetSurroundingBombCount (x, y);
             if (count == 0)
@@ -97,7 +88,7 @@ namespace Minesweeper
                     break;
             }
 
-            return count;
+            return (LeftResult) count;
         }
 
         private int GetSurroundingBombCount (int x, int y)
@@ -129,35 +120,41 @@ namespace Minesweeper
 
         public int GetRemainingFlagCount () => BombCoordinates.Count - FlagCoordinates.Count;
 
-        /// <summary>
-        /// Returns 1 if the player has won, -1 if there was a flag already, -2 if the field was already opened and 0 elsewise
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public int SetFlag (int x, int y)
+        public RightResult SetFlag (int x, int y, MainWindow mainWindow)
         {
             if (OpenedCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y))
-                return -2;
+                return RightResult.AlreadyOpened;
             for (var i = 0; i < FlagCoordinates.Count; i++)
             {
                 var tuple = FlagCoordinates [i];
                 if (tuple.Item1 != x || tuple.Item2 != y)
                     continue;
                 FlagCoordinates.RemoveAt (i);
-                return -1;
+                mainWindow.RemoveFlag (x, y);
+                return RightResult.AlreadyFlagged;
             }
 
             if (GetRemainingFlagCount () == 0)
-                return -3;
+                return RightResult.NoFlagsLeft;
 
             FlagCoordinates.Add ((x, y));
-            return BombCoordinates.All (bombCoordinate =>
-                                            FlagCoordinates.Any (flagCoordinate =>
-                                                                     flagCoordinate.Item1 == bombCoordinate.Item1 &&
-                                                                     flagCoordinate.Item2 == bombCoordinate.Item2))
-                       ? 1
-                       : 0;
+            var won = BombCoordinates.All (bombCoordinate =>
+                                               FlagCoordinates.Any (flagCoordinate =>
+                                                                        flagCoordinate.Item1 == bombCoordinate.Item1 &&
+                                                                        flagCoordinate.Item2 == bombCoordinate.Item2));
+
+            if (won)
+            {
+                mainWindow.Time = -1;
+                MessageBox.Show ("You won.");
+                mainWindow.SetSize (SizeX, SizeY);
+            }
+            else
+                mainWindow.SaveFlag (x, y);
+
+            mainWindow.SetFlagCount (GetRemainingFlagCount ());
+
+            return won ? RightResult.Won : RightResult.Valid;
         }
 
         private bool IsBomb (int x, int y) => BombCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y);

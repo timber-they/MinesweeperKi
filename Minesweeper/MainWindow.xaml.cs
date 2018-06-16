@@ -90,33 +90,12 @@ namespace Minesweeper
         private void ButtonOnMouseRightButtonUp (object sender, MouseButtonEventArgs e)
         {
             var (x, y) = ((int, int)) ((Button) sender).Tag;
-            var won = Field.SetFlag (x, y);
-            switch (won)
-            {
-                case 0:
-                    ((Button) sender).Content    = "I";
-                    ((Button) sender).Foreground = Brushes.Red;
-                    break;
-                case -1:
-                    ((Button) sender).Content    = "";
-                    ((Button) sender).Foreground = Brushes.DarkGray;
-                    break;
-                case 1:
-                    Time = -1;
-                    MessageBox.Show ("You won.");
-                    SetSize (Field.SizeX, Field.SizeY);
-                    break;
-                case -2:
-                case -3:
-                    break;
-            }
-
-            FlagLabel.Content = $"{Field.GetRemainingFlagCount ()} flags";
+            RightClickOnField (x, y);
         }
 
         public void SaveEmpty (int x, int y)
         {
-            var sender = (Button) Grid.Children [x + y * Field.SizeX];
+            var sender = GetButton (x, y);
             Debug.WriteLine ($"    saved empty {sender.Tag}");
             sender.Background = Brushes.SlateGray;
             sender.IsEnabled  = false;
@@ -128,7 +107,7 @@ namespace Minesweeper
 
         public void SaveClosing (int x, int y, int count)
         {
-            var button = (Button) Grid.Children [x + y * Field.SizeX];
+            var button = GetButton (x, y);
             Debug.WriteLine ($"    saved closing {button.Tag}");
             button.Background = Brushes.SlateGray;
             button.IsEnabled  = false;
@@ -140,11 +119,34 @@ namespace Minesweeper
             InvalidateVisual ();
         }
 
+        public void SaveFlag (int x, int y)
+        {
+            var button = GetButton (x, y);
+
+            button.Content    = "I";
+            button.Foreground = Brushes.Red;
+        }
+
+        public void RemoveFlag (int x, int y)
+        {
+            var button = GetButton (x, y);
+
+            button.Content    = "";
+            button.Foreground = Brushes.DarkGray;
+        }
+
+        private Button GetButton (int x, int y) => (Button) Grid.Children [x + y * Field.SizeX];
+
+        public void SetFlagCount (int count) => FlagLabel.Content = $"{count} flags";
+
         private void ButtonOnClick (object sender, RoutedEventArgs e)
         {
             var (x, y) = ((int, int)) ((Button) sender).Tag;
-            var result = Field.OpenField (x, y, this);
-            Debug.WriteLine ($"----Score: {result}");
+            LeftClickOnField (x, y);
         }
+
+        public LeftResult LeftClickOnField (int x, int y) => Field.OpenField (x, y, this);
+
+        public RightResult RightClickOnField (int x, int y) => Field.SetFlag (x, y, this);
     }
 }
