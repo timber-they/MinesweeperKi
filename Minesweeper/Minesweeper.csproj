@@ -54,6 +54,7 @@
     <Compile Include="Ki\KnownProperty.cs" />
     <Compile Include="Ki\Main.cs" />
     <Compile Include="Ki\Solver.cs" />
+    <Compile Include="ReferenceInt.cs" />
     <Compile Include="RightResult.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

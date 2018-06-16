@@ -17,8 +17,8 @@ namespace Minesweeper
     /// </summary>
     public partial class MainWindow
     {
-        private Timer Timer { get; set; }
-        public  int   Time;
+        private Timer        Timer { get; set; }
+        public  ReferenceInt Time;
 
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
@@ -39,7 +39,7 @@ namespace Minesweeper
 
         private Field Field { get; set; }
 
-        public MainWindow () => Init (20, 20);
+        public MainWindow () => Init (25, 25);
 
         public MainWindow (int sizeX, int sizeY) => Init (sizeX, sizeY);
 
@@ -55,9 +55,13 @@ namespace Minesweeper
                                    Time++;
                                    TimeLabel.Dispatcher.Invoke (() =>
                                    {
-                                       if (Time % 2 == 0)
-                                            Solver.TakeAction ();
-                                       return TimeLabel.Content = $"{Time * 50} ms";
+                                       lock (Time)
+                                       {
+                                           if (Time % 2 == 0)
+                                               Solver.TakeAction ();
+                                           if (Time.Value != -1)
+                                               TimeLabel.Content = $"{Time * 20} ms";
+                                       }
                                    });
                                }, null, 50,
                                10);
@@ -78,7 +82,7 @@ namespace Minesweeper
 
             Solver = new Solver (this);
 
-            Time  = 0;
+            Time  = new ReferenceInt (0);
             Field = new Field (x, y, 0.85);
 
             Grid.Children.Clear ();
@@ -151,7 +155,7 @@ namespace Minesweeper
         {
             var button = GetButton (x, y);
             button.Background = Brushes.Red;
-            button.Content = "O";
+            button.Content    = "O";
 
             InvalidateArrange ();
             InvalidateMeasure ();

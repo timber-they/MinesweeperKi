@@ -76,7 +76,7 @@ namespace Minesweeper
             switch (count)
             {
                 case -1:
-                    mainWindow.Time = -1;
+                    mainWindow.Time = new ReferenceInt (-1);
                     mainWindow.SaveBomb (x, y);
                     MessageBox.Show ("You lost.");
                     mainWindow.SetSize (SizeX, SizeY);
@@ -145,18 +145,17 @@ namespace Minesweeper
                                                                         flagCoordinate.Item1 == bombCoordinate.Item1 &&
                                                                         flagCoordinate.Item2 == bombCoordinate.Item2));
 
-            if (won)
-            {
-                mainWindow.Time = -1;
-                MessageBox.Show ("You won.");
-                mainWindow.SetSize (SizeX, SizeY);
-            }
-            else
-                mainWindow.SaveFlag (x, y);
-
+            mainWindow.SaveFlag (x, y);
             mainWindow.SetFlagCount (GetRemainingFlagCount ());
 
-            return won ? RightResult.Won : RightResult.Valid;
+            if (!won)
+                return RightResult.Valid;
+
+            mainWindow.Time = new ReferenceInt (-1);
+            MessageBox.Show ("You won.");
+            mainWindow.SetSize (SizeX, SizeY);
+
+            return RightResult.Won;
         }
 
         private bool IsBomb (int x, int y) => BombCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y);
