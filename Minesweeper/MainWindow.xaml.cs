@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
+using Minesweeper.Ki;
+
 
 namespace Minesweeper
 {
@@ -17,6 +19,11 @@ namespace Minesweeper
     {
         private Timer Timer { get; set; }
         public  int   Time;
+
+        public int SizeX { get; private set; }
+        public int SizeY { get; private set; }
+
+        private Solver Solver { get; set; }
 
         private Dictionary <int, Brush> NumberColors { get; set; } = new Dictionary <int, Brush>
         {
@@ -32,25 +39,47 @@ namespace Minesweeper
 
         private Field Field { get; set; }
 
-        public MainWindow ()
+        public MainWindow () => Init (20, 20);
+
+        public MainWindow (int sizeX, int sizeY) => Init (sizeX, sizeY);
+
+        private void Init (int sizeX, int sizeY)
         {
             InitializeComponent ();
 
-            SetSize (20, 20);
+            SetSize (sizeX, sizeY);
             Timer = new Timer (state =>
                                {
                                    if (Time == -1)
                                        return;
                                    Time++;
-                                   TimeLabel.Dispatcher.Invoke (() => TimeLabel.Content = $"{Time} ms");
-                               }, null, 1,
-                               1);
+                                   TimeLabel.Dispatcher.Invoke (() =>
+                                   {
+                                       if (Time % 2 == 0)
+                                            Solver.TakeAction ();
+                                       return TimeLabel.Content = $"{Time * 50} ms";
+                                   });
+                               }, null, 50,
+                               10);
+        }
+
+        /// <inheritdoc />
+        protected override void OnKeyUp (KeyEventArgs e)
+        {
+            base.OnKeyUp (e);
+            if (e.Key == Key.Enter)
+                Solver.TakeAction ();
         }
 
         public void SetSize (int x, int y)
         {
+            SizeX = x;
+            SizeY = y;
+
+            Solver = new Solver (this);
+
             Time  = 0;
-            Field = new Field (x, y, 0.8);
+            Field = new Field (x, y, 0.85);
 
             Grid.Children.Clear ();
 
@@ -73,7 +102,8 @@ namespace Minesweeper
                         Content         = "",
                         Background      = Brushes.DarkGray,
                         Tag             = (xI, yI),
-                        FontWeight      = FontWeights.Bold
+                        FontWeight      = FontWeights.Bold,
+                        ToolTip         = $"{xI}, {yI}"
                     };
 
                     button.Click              += ButtonOnClick;
@@ -95,10 +125,9 @@ namespace Minesweeper
 
         public void SaveEmpty (int x, int y)
         {
-            var sender = GetButton (x, y);
-            Debug.WriteLine ($"    saved empty {sender.Tag}");
-            sender.Background = Brushes.SlateGray;
-            sender.IsEnabled  = false;
+            var button = GetButton (x, y);
+            button.Background = Brushes.SlateGray;
+            button.IsEnabled  = false;
 
             InvalidateArrange ();
             InvalidateMeasure ();
@@ -108,11 +137,21 @@ namespace Minesweeper
         public void SaveClosing (int x, int y, int count)
         {
             var button = GetButton (x, y);
-            Debug.WriteLine ($"    saved closing {button.Tag}");
             button.Background = Brushes.SlateGray;
             button.IsEnabled  = false;
             button.Content    = count;
             button.Foreground = NumberColors [count];
+
+            InvalidateArrange ();
+            InvalidateMeasure ();
+            InvalidateVisual ();
+        }
+
+        public void SaveBomb (int x, int y)
+        {
+            var button = GetButton (x, y);
+            button.Background = Brushes.Red;
+            button.Content = "O";
 
             InvalidateArrange ();
             InvalidateMeasure ();
@@ -145,8 +184,10 @@ namespace Minesweeper
             LeftClickOnField (x, y);
         }
 
-        public LeftResult LeftClickOnField (int x, int y) => Field.OpenField (x, y, this);
+        public List <((int, int), LeftResult)> LeftClickOnField (int x, int y) => Field.OpenField (x, y, this);
 
         public RightResult RightClickOnField (int x, int y) => Field.SetFlag (x, y, this);
+
+        public int GetFlagCount () => Field.GetRemainingFlagCount ();
     }
 }

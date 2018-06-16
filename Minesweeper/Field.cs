@@ -38,45 +38,46 @@ namespace Minesweeper
             SizeY = y;
         }
 
-        public LeftResult OpenField (int x, int y, MainWindow mainWindow)
+        public List <((int, int), LeftResult)> OpenField (int x, int y, MainWindow mainWindow)
         {
+            var fin = new List <((int, int), LeftResult)> (1);
+
             if (OpenedCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y) ||
                 FlagCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y))
-                return LeftResult.AlreadyOpen;
+            {
+                fin.Add (((x, y), LeftResult.AlreadyOpen));
+                return fin;
+            }
 
             var count = GetSurroundingBombCount (x, y);
             if (count == 0)
             {
                 CheckedFields.Add ((x, y));
-                RecursiveCheck (x + 1, y);
-                RecursiveCheck (x + 1, y - 1);
-                RecursiveCheck (x + 1, y + 1);
-                RecursiveCheck (x, y - 1);
-                RecursiveCheck (x, y + 1);
-                RecursiveCheck (x - 1, y);
-                RecursiveCheck (x - 1, y - 1);
-                RecursiveCheck (x - 1, y + 1);
+                fin.AddRange (RecursiveCheck (x + 1, y));
+                fin.AddRange (RecursiveCheck (x + 1, y - 1));
+                fin.AddRange (RecursiveCheck (x + 1, y + 1));
+                fin.AddRange (RecursiveCheck (x, y - 1));
+                fin.AddRange (RecursiveCheck (x, y + 1));
+                fin.AddRange (RecursiveCheck (x - 1, y));
+                fin.AddRange (RecursiveCheck (x - 1, y - 1));
+                fin.AddRange (RecursiveCheck (x - 1, y + 1));
 
-                void RecursiveCheck (int newX, int newY)
+                List <((int, int), LeftResult)> RecursiveCheck (int newX, int newY)
                 {
                     if (!CheckedFields.All (tuple => tuple.Item1 != newX || tuple.Item2 != newY) ||
                         GetSurroundingBombCount (newX, newY) < 0)
-                        return;
-                    Debug.IndentLevel++;
+                        return new List <((int, int), LeftResult)> ();
 
-                    OpenField (newX, newY, mainWindow);
-
-                    Debug.IndentLevel--;
+                    return OpenField (newX, newY, mainWindow);
                 }
             }
 
             OpenedCoordinates.Add ((x, y));
-            Debug.WriteLine ($"Opened field ({x}, {y})");
             switch (count)
             {
                 case -1:
                     mainWindow.Time = -1;
-                    Debug.WriteLine ("    Lost");
+                    mainWindow.SaveBomb (x, y);
                     MessageBox.Show ("You lost.");
                     mainWindow.SetSize (SizeX, SizeY);
                     break;
@@ -88,7 +89,8 @@ namespace Minesweeper
                     break;
             }
 
-            return (LeftResult) count;
+            fin.Add (((x, y), (LeftResult) count));
+            return fin;
         }
 
         private int GetSurroundingBombCount (int x, int y)

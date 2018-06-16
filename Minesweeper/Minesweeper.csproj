@@ -50,6 +50,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Ki\KnownField.cs" />
+    <Compile Include="Ki\KnownProperty.cs" />
+    <Compile Include="Ki\Main.cs" />
+    <Compile Include="Ki\Solver.cs" />
     <Compile Include="RightResult.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
