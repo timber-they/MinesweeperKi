@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,14 +9,20 @@ using System.Windows.Media;
 
 using Minesweeper.Ki;
 
+using static Minesweeper.Game.Coordinate;
 
-namespace Minesweeper
+
+// ReSharper disable UnusedMember.Global
+
+
+namespace Minesweeper.Game
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Timer        Timer { get; set; }
         public  ReferenceInt Time;
 
@@ -24,6 +30,8 @@ namespace Minesweeper
         public int SizeY { get; private set; }
 
         private Solver Solver { get; set; }
+
+        private bool Solving { get; set; }
 
         private Dictionary <int, Brush> NumberColors { get; set; } = new Dictionary <int, Brush>
         {
@@ -57,7 +65,7 @@ namespace Minesweeper
                                    {
                                        lock (Time)
                                        {
-                                           if (Time % 2 == 0)
+                                           if (Time % 2 == 0 && Solving)
                                                Solver.TakeAction ();
                                            if (Time.Value != -1)
                                                TimeLabel.Content = $"{Time * 20} ms";
@@ -71,8 +79,15 @@ namespace Minesweeper
         protected override void OnKeyUp (KeyEventArgs e)
         {
             base.OnKeyUp (e);
-            if (e.Key == Key.Enter)
-                Solver.TakeAction ();
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    Solver.TakeAction ();
+                    break;
+                case Key.Escape:
+                    Solving = true;
+                    break;
+            }
         }
 
         public void SetSize (int x, int y)
@@ -90,12 +105,13 @@ namespace Minesweeper
             Grid.ColumnDefinitions.Clear ();
             Grid.RowDefinitions.Clear ();
 
-            for (var i = 0; i < x; i++)
+            for (var i = 0; i <= x; i++)
                 Grid.ColumnDefinitions.Add (new ColumnDefinition {Width = new GridLength (100, GridUnitType.Star)});
-            for (var i = 0; i < y; i++)
+            for (var i = 0; i <= y; i++)
                 Grid.RowDefinitions.Add (new RowDefinition {Height = new GridLength (100, GridUnitType.Star)});
 
             for (var yI = 0; yI < y; yI++)
+            {
                 for (var xI = 0; xI < x; xI++)
                 {
                     var button = new Button
@@ -105,7 +121,7 @@ namespace Minesweeper
                         Foreground      = Brushes.DarkGray,
                         Content         = "",
                         Background      = Brushes.DarkGray,
-                        Tag             = (xI, yI),
+                        Tag             = C (xI, yI),
                         FontWeight      = FontWeights.Bold,
                         ToolTip         = $"{xI}, {yI}"
                     };
@@ -116,15 +132,37 @@ namespace Minesweeper
                     Grid.Children.Add (button);
                     Grid.SetColumn (button, xI);
                     Grid.SetRow (button, yI);
+
+                    if (yI != 0)
+                        continue;
+
+                    var labelX = new Label
+                    {
+                        BorderThickness = new Thickness (0),
+                        Foreground      = Brushes.Black,
+                        Content         = xI,
+                        Background      = Brushes.White
+                    };
+
+                    Grid.Children.Add (labelX);
+                    Grid.SetColumn (labelX, xI);
+                    Grid.SetRow (labelX, y);
                 }
 
-            FlagLabel.Content = $"{Field.GetRemainingFlagCount ()} flags";
-        }
+                var labelY = new Label
+                {
+                    BorderThickness = new Thickness (0),
+                    Foreground      = Brushes.Black,
+                    Content         = yI,
+                    Background      = Brushes.White
+                };
 
-        private void ButtonOnMouseRightButtonUp (object sender, MouseButtonEventArgs e)
-        {
-            var (x, y) = ((int, int)) ((Button) sender).Tag;
-            RightClickOnField (x, y);
+                Grid.Children.Add (labelY);
+                Grid.SetColumn (labelY, x);
+                Grid.SetRow (labelY, yI);
+            }
+
+            FlagLabel.Content = $"{Field.GetRemainingFlagCount ()} flags";
         }
 
         public void SaveEmpty (int x, int y)
@@ -155,7 +193,8 @@ namespace Minesweeper
         {
             var button = GetButton (x, y);
             button.Background = Brushes.Red;
-            button.Content    = "O";
+            button.Content    = "💣";
+            button.Foreground = Brushes.Black;
 
             InvalidateArrange ();
             InvalidateMeasure ();
@@ -166,7 +205,7 @@ namespace Minesweeper
         {
             var button = GetButton (x, y);
 
-            button.Content    = "I";
+            button.Content    = "🏁";
             button.Foreground = Brushes.Red;
         }
 
@@ -178,20 +217,20 @@ namespace Minesweeper
             button.Foreground = Brushes.DarkGray;
         }
 
-        private Button GetButton (int x, int y) => (Button) Grid.Children [x + y * Field.SizeX];
+        private Button GetButton (int x, int y) => Grid.Children.OfType <Button> ().
+                                                        First (button => Grid.GetColumn (button) == x &&
+                                                                         Grid.GetRow (button) == y);
 
         public void SetFlagCount (int count) => FlagLabel.Content = $"{count} flags";
 
-        private void ButtonOnClick (object sender, RoutedEventArgs e)
-        {
-            var (x, y) = ((int, int)) ((Button) sender).Tag;
-            LeftClickOnField (x, y);
-        }
+        private void ButtonOnClick (object sender, RoutedEventArgs e) =>
+            Solver.SetField ((Coordinate) ((Button) sender).Tag);
 
-        public List <((int, int), LeftResult)> LeftClickOnField (int x, int y) => Field.OpenField (x, y, this);
+        private void ButtonOnMouseRightButtonUp (object sender, MouseButtonEventArgs e) =>
+            Solver.SetFlag ((Coordinate) ((Button) sender).Tag);
+
+        public IEnumerable <(Coordinate, LeftResult)> LeftClickOnField (int x, int y) => Field.OpenField (x, y, this);
 
         public RightResult RightClickOnField (int x, int y) => Field.SetFlag (x, y, this);
-
-        public int GetFlagCount () => Field.GetRemainingFlagCount ();
     }
 }

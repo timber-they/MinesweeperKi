@@ -2,7 +2,15 @@
 {
     public class ReferenceInt
     {
-        public int Value { get; set; }
+        /// <inheritdoc />
+        public override bool Equals (object obj) => !ReferenceEquals (null, obj) &&
+                                                    (ReferenceEquals (this, obj) ||
+                                                     obj.GetType () == GetType () && Equals ((ReferenceInt) obj));
+
+        /// <inheritdoc />
+        public override int GetHashCode () => Value;
+
+        public int Value { get; }
 
         public ReferenceInt (int value) => Value = value;
 
@@ -19,5 +27,7 @@
 
         /// <inheritdoc />
         public override string ToString () => Value.ToString ();
+
+        private bool Equals (ReferenceInt other) => Value == other.Value;
     }
 }

@@ -1,5 +1,9 @@
 ﻿using System;
 
+using Minesweeper.Game;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+
 
 namespace Minesweeper.Ki
 {
@@ -16,14 +20,14 @@ namespace Minesweeper.Ki
             Random = new Random ();
         }
 
-        private MainWindow MainWindow { get; set; }
+        private MainWindow MainWindow { get; }
 
         public void TakeAction ()
         {
             var sureSpot = Field.FindSureSpot ();
             if (sureSpot != null)
             {
-                var (x, y) = sureSpot.Value;
+                var (x, y) = sureSpot;
                 SetFlag (x, y);
                 return;
             }
@@ -31,7 +35,7 @@ namespace Minesweeper.Ki
             var saveSpot = Field.FindSaveSpot ();
             if (saveSpot != null)
             {
-                var (x, y) = saveSpot.Value;
+                var (x, y) = saveSpot;
                 SetField (x, y);
                 return;
             }
@@ -49,7 +53,7 @@ namespace Minesweeper.Ki
             SetField (r);
         }
 
-        private void SetField (int initalX, int initalY)
+        public void SetField (int initalX, int initalY)
         {
             var results = MainWindow.LeftClickOnField (initalX, initalY);
 
@@ -74,17 +78,21 @@ namespace Minesweeper.Ki
             }
         }
 
+        public void SetField (Coordinate coordinate) => SetField (coordinate.X, coordinate.Y);
+
         private void SetField (int i)
         {
             var (x, y) = Field.GetCoordinates (i);
             SetField (x, y);
         }
 
-        private KnownProperty SetFlag (int i)
+        public KnownProperty SetFlag (int i)
         {
             var (x, y) = Field.GetCoordinates (i);
             return SetFlag (x, y);
         }
+
+        public KnownProperty SetFlag (Coordinate coordiante) => SetFlag (coordiante.X, coordiante.Y);
 
         private KnownProperty SetFlag (int x, int y)
         {

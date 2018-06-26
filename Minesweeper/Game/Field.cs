@@ -1,58 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
+
+using static Minesweeper.Game.Coordinate;
 
 
-namespace Minesweeper
+namespace Minesweeper.Game
 {
     public class Field
     {
-        private Random _random;
+        private Random Random { get; }
 
-        public  List <(int, int)> BombCoordinates   { get; }
-        private List <(int, int)> FlagCoordinates   { get; }
-        private List <(int, int)> OpenedCoordinates { get; }
-        private List <(int, int)> CheckedFields     { get; }
+        public  List <Coordinate> BombCoordinates   { get; }
+        private List <Coordinate> FlagCoordinates   { get; }
+        private List <Coordinate> OpenedCoordinates { get; }
+        private List <Coordinate> CheckedFields     { get; }
         public  int               SizeX             { get; }
         public  int               SizeY             { get; }
 
         public Field (int x, int y, double threshold)
         {
-            BombCoordinates   = new List <(int, int)> ();
-            FlagCoordinates   = new List <(int, int)> ();
-            OpenedCoordinates = new List <(int, int)> ();
-            CheckedFields     = new List <(int, int)> ();
+            BombCoordinates   = new List <Coordinate> ();
+            FlagCoordinates   = new List <Coordinate> ();
+            OpenedCoordinates = new List <Coordinate> ();
+            CheckedFields     = new List <Coordinate> ();
 
-            _random = new Random ();
+            Random = new Random ();
             for (var xI = 0; xI < x; xI++)
                 for (var yI = 0; yI < y; yI++)
-                    if (_random.NextDouble () > threshold)
-                        BombCoordinates.Add ((xI, yI));
+                    if (Random.NextDouble () > threshold)
+                        BombCoordinates.Add (C (xI, yI));
 
             SizeX = x;
             SizeY = y;
         }
 
-        public List <((int, int), LeftResult)> OpenField (int x, int y, MainWindow mainWindow)
+        public IEnumerable <(Coordinate, LeftResult)> OpenField (int x, int y, MainWindow mainWindow)
         {
-            var fin = new List <((int, int), LeftResult)> (1);
+            if (OpenedCoordinates.Any (coordinate => coordinate.X == x && coordinate.Y == y) ||
+                FlagCoordinates.Any (coordinate => coordinate.X == x && coordinate.Y == y))
+                return new [] {(C (x, y), LeftResult.AlreadyOpen)};
 
-            if (OpenedCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y) ||
-                FlagCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y))
-            {
-                fin.Add (((x, y), LeftResult.AlreadyOpen));
-                return fin;
-            }
+            var fin = new List <(Coordinate, LeftResult)> ();
 
             var count = GetSurroundingBombCount (x, y);
             if (count == 0)
             {
-                CheckedFields.Add ((x, y));
+                CheckedFields.Add (C (x, y));
                 fin.AddRange (RecursiveCheck (x + 1, y));
                 fin.AddRange (RecursiveCheck (x + 1, y - 1));
                 fin.AddRange (RecursiveCheck (x + 1, y + 1));
@@ -62,17 +57,17 @@ namespace Minesweeper
                 fin.AddRange (RecursiveCheck (x - 1, y - 1));
                 fin.AddRange (RecursiveCheck (x - 1, y + 1));
 
-                List <((int, int), LeftResult)> RecursiveCheck (int newX, int newY)
+                IEnumerable <(Coordinate, LeftResult)> RecursiveCheck (int newX, int newY)
                 {
-                    if (!CheckedFields.All (tuple => tuple.Item1 != newX || tuple.Item2 != newY) ||
+                    if (!CheckedFields.All (coordinate => coordinate.X != newX || coordinate.Y != newY) ||
                         GetSurroundingBombCount (newX, newY) < 0)
-                        return new List <((int, int), LeftResult)> ();
+                        return new List <(Coordinate, LeftResult)> ();
 
                     return OpenField (newX, newY, mainWindow);
                 }
             }
 
-            OpenedCoordinates.Add ((x, y));
+            OpenedCoordinates.Add (C (x, y));
             switch (count)
             {
                 case -1:
@@ -89,7 +84,7 @@ namespace Minesweeper
                     break;
             }
 
-            fin.Add (((x, y), (LeftResult) count));
+            fin.Add ((C (x, y), (LeftResult) count));
             return fin;
         }
 
@@ -124,12 +119,12 @@ namespace Minesweeper
 
         public RightResult SetFlag (int x, int y, MainWindow mainWindow)
         {
-            if (OpenedCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y))
+            if (OpenedCoordinates.Any ((coordinate) => coordinate.X == x && coordinate.Y == y))
                 return RightResult.AlreadyOpened;
             for (var i = 0; i < FlagCoordinates.Count; i++)
             {
-                var tuple = FlagCoordinates [i];
-                if (tuple.Item1 != x || tuple.Item2 != y)
+                var (existingX, existingY) = FlagCoordinates [i];
+                if (existingX != x || existingY != y)
                     continue;
                 FlagCoordinates.RemoveAt (i);
                 mainWindow.RemoveFlag (x, y);
@@ -139,11 +134,11 @@ namespace Minesweeper
             if (GetRemainingFlagCount () == 0)
                 return RightResult.NoFlagsLeft;
 
-            FlagCoordinates.Add ((x, y));
+            FlagCoordinates.Add (C (x, y));
             var won = BombCoordinates.All (bombCoordinate =>
                                                FlagCoordinates.Any (flagCoordinate =>
-                                                                        flagCoordinate.Item1 == bombCoordinate.Item1 &&
-                                                                        flagCoordinate.Item2 == bombCoordinate.Item2));
+                                                                        flagCoordinate.X == bombCoordinate.X &&
+                                                                        flagCoordinate.Y == bombCoordinate.Y));
 
             mainWindow.SaveFlag (x, y);
             mainWindow.SetFlagCount (GetRemainingFlagCount ());
@@ -158,6 +153,7 @@ namespace Minesweeper
             return RightResult.Won;
         }
 
-        private bool IsBomb (int x, int y) => BombCoordinates.Any (tuple => tuple.Item1 == x && tuple.Item2 == y);
+        private bool IsBomb (int x, int y) =>
+            BombCoordinates.Any (coordinate => coordinate.X == x && coordinate.Y == y);
     }
 }

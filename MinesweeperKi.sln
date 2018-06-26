@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minesweeper", "Minesweeper\Minesweeper.csproj", "{1F7CCBF5-33B9-48DE-B085-BB4EC093A1CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C8EF0151-3BCE-4CF5-90FB-4DB0018B4B89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{1F7CCBF5-33B9-48DE-B085-BB4EC093A1CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F7CCBF5-33B9-48DE-B085-BB4EC093A1CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F7CCBF5-33B9-48DE-B085-BB4EC093A1CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8EF0151-3BCE-4CF5-90FB-4DB0018B4B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8EF0151-3BCE-4CF5-90FB-4DB0018B4B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8EF0151-3BCE-4CF5-90FB-4DB0018B4B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8EF0151-3BCE-4CF5-90FB-4DB0018B4B89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

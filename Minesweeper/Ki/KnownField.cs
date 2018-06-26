@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
+using Minesweeper.Game;
+using Minesweeper.Ki.Masks;
+
+using static Minesweeper.Game.Coordinate;
+
 
 namespace Minesweeper.Ki
 {
@@ -29,12 +34,11 @@ namespace Minesweeper.Ki
         public KnownProperty? Get (int i)
             => i < 0 || i >= Field.Count ? (KnownProperty?) null : Field [i];
 
-        public (int, int) GetCoordinates (int i)
-            => (i % SizeX, i / SizeX);
+        public Coordinate GetCoordinates (int i)
+            => C (i % SizeX, i / SizeX);
 
-        public List <(int, int)> FindFullClose ()
+        private IEnumerable <Coordinate> FindFullClose ()
         {
-            var fin = new List <(int, int)> ();
             for (var i = 0; i < Field.Count; i++)
             {
                 if ((int) Field [i] < 1)
@@ -43,13 +47,11 @@ namespace Minesweeper.Ki
                 var close = GetCloseFields (x, y);
                 var count = close.Count (property => property == KnownProperty.Flagged);
                 if (count == (int) Field [i])
-                    fin.Add ((x, y));
+                    yield return C (x, y);
             }
-
-            return fin;
         }
 
-        public (int, int)? FindSaveSpot ()
+        public Coordinate FindSaveSpot ()
         {
             var fullClose = FindFullClose ();
             foreach (var (x, y) in fullClose)
@@ -57,13 +59,13 @@ namespace Minesweeper.Ki
                 var closeFields = GetCloseFields (x, y);
                 for (var i = 0; i < closeFields.Count; i++)
                     if (closeFields [i] == KnownProperty.Unknown)
-                        return GetCloseCoordinate (x, y, closeFields, i);
+                        return GetCloseCoordinate (x, y, i);
             }
 
             return null;
         }
 
-        public (int, int)? FindSureSpot ()
+        public Coordinate FindSureSpot ()
         {
             for (var i = 0; i < Field.Count; i++)
             {
@@ -78,29 +80,13 @@ namespace Minesweeper.Ki
                     continue;
                 for (var j = 0; j < close.Count; j++)
                     if (close [j] == KnownProperty.Unknown)
-                        return GetCloseCoordinate (x, y, close, j);
+                        return GetCloseCoordinate (x, y, j);
             }
 
             return GetSureFieldAtTwosOnEdge ();
         }
 
-        private List <(int, int)> GetTwos ()
-        {
-            var fin = new List <(int, int)> ();
-
-            for (var i = 0; i < Field.Count; i++)
-            {
-                var (x, y) = GetCoordinates (i);
-                if (GetRemainingCount (x, y) == 2)
-                    fin.Add ((x, y));
-            }
-
-            return fin;
-        }
-
-        private int GetRemainingCount ((int x, int y) coordinates) => GetRemainingCount (coordinates.x, coordinates.y);
-
-        private int GetRemainingCount (int x, int y)
+        public int GetRemainingCount (int x, int y)
         {
             var count = (int) (Get (x, y) ?? 0);
             if (count < 1)
@@ -110,85 +96,12 @@ namespace Minesweeper.Ki
             return count - flaggedCount;
         }
 
-        private (int, int)? GetSureFieldAtTwosOnEdge ()
+        private Coordinate GetSureFieldAtTwosOnEdge ()
         {
-            var twos = GetTwos ();
-            Debug.WriteLine ("Twos: " + string.Join (", ", twos));
-            foreach (var two in twos)
-            {
-                var (x, y) = two;
-                var close = GetCloseFields (x, y);
-                if (
-                    close [0] == KnownProperty.Unknown &&
-                    close [1] == KnownProperty.Unknown &&
-                    close [2] == KnownProperty.Unknown &&
-                    close [3] != KnownProperty.Unknown &&
-                    close [4] != KnownProperty.Unknown &&
-                    close [5] != KnownProperty.Unknown &&
-                    close [6] != KnownProperty.Unknown &&
-                    close [7] != KnownProperty.Unknown)
-                {
-                    //Top edge
-                    Debug.WriteLine ($"Found top edge {two}");
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 3)) == 1)
-                        return GetCloseCoordinate (x, y, close, 2);
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 4)) == 1)
-                        return GetCloseCoordinate (x, y, close, 0);
-                }
-                else if (
-                    close [0] == KnownProperty.Unknown &&
-                    close [1] != KnownProperty.Unknown &&
-                    close [2] != KnownProperty.Unknown &&
-                    close [3] == KnownProperty.Unknown &&
-                    close [4] != KnownProperty.Unknown &&
-                    close [5] == KnownProperty.Unknown &&
-                    close [6] != KnownProperty.Unknown &&
-                    close [7] != KnownProperty.Unknown)
-                {
-                    //Left edge
-                    Debug.WriteLine ($"Found left edge {two}");
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 1)) == 1)
-                        return GetCloseCoordinate (x, y, close, 5);
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 6)) == 1)
-                        return GetCloseCoordinate (x, y, close, 0);
-                }
-                else if (
-                    close [0] != KnownProperty.Unknown &&
-                    close [1] != KnownProperty.Unknown &&
-                    close [2] == KnownProperty.Unknown &&
-                    close [3] != KnownProperty.Unknown &&
-                    close [4] == KnownProperty.Unknown &&
-                    close [5] != KnownProperty.Unknown &&
-                    close [6] != KnownProperty.Unknown &&
-                    close [7] == KnownProperty.Unknown)
-                {
-                    //Right edge
-                    Debug.WriteLine ($"Found right edge {two}");
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 6)) == 1)
-                        return GetCloseCoordinate (x, y, close, 2);
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 1)) == 1)
-                        return GetCloseCoordinate (x, y, close, 7);
-                }
-                else if (
-                    close [0] != KnownProperty.Unknown &&
-                    close [1] != KnownProperty.Unknown &&
-                    close [2] != KnownProperty.Unknown &&
-                    close [3] != KnownProperty.Unknown &&
-                    close [4] != KnownProperty.Unknown &&
-                    close [5] == KnownProperty.Unknown &&
-                    close [6] == KnownProperty.Unknown &&
-                    close [7] == KnownProperty.Unknown)
-                {
-                    //Bottom edge
-                    Debug.WriteLine ($"Found bottom edge {two}");
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 3)) == 1)
-                        return GetCloseCoordinate (x, y, close, 7);
-                    if (GetRemainingCount (GetCloseCoordinate (x, y, close, 4)) == 1)
-                        return GetCloseCoordinate (x, y, close, 5);
-                }
-            }
+            var masks              = EdgeMasks.AllMasks;
+            var matchedCoordinates = masks.SelectMany (mask => mask.FindNullPointIntersections (this)).ToList ();
 
-            return null;
+            return matchedCoordinates.FirstOrDefault ();
         }
 
         /// <summary>
@@ -209,26 +122,26 @@ namespace Minesweeper.Ki
                 Get (x + 1, y + 1),
             };
 
-        private (int, int) GetCloseCoordinate <T> (int xBase, int yBase, List <T> close, int index)
+        private static Coordinate GetCloseCoordinate (int xBase, int yBase, int index)
         {
             switch (index)
             {
                 case 0:
-                    return (xBase - 1, yBase - 1);
+                    return C (xBase - 1, yBase - 1);
                 case 1:
-                    return (xBase, yBase - 1);
+                    return C (xBase, yBase - 1);
                 case 2:
-                    return (xBase + 1, yBase - 1);
+                    return C (xBase + 1, yBase - 1);
                 case 3:
-                    return (xBase - 1, yBase);
+                    return C (xBase - 1, yBase);
                 case 4:
-                    return (xBase + 1, yBase);
+                    return C (xBase + 1, yBase);
                 case 5:
-                    return (xBase - 1, yBase + 1);
+                    return C (xBase - 1, yBase + 1);
                 case 6:
-                    return (xBase, yBase + 1);
+                    return C (xBase, yBase + 1);
                 case 7:
-                    return (xBase + 1, yBase + 1);
+                    return C (xBase + 1, yBase + 1);
                 default:
                     throw new IndexOutOfRangeException ();
             }
