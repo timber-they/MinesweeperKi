@@ -13,13 +13,13 @@ namespace Minesweeper.Ki.Masks
 {
     public class Mask
     {
-        private List <int?> Values { get; }
+        private List <MaskValue> Values { get; }
         private int         SizeX  { get; }
         private int         SizeY  { get; }
         private string      Name   { get; }
 
         /// <inheritdoc />
-        public Mask (List <int?> values, int sizeX, string name = "")
+        public Mask (List <MaskValue> values, int sizeX, string name = "")
         {
             if (values.Count % sizeX != 0)
                 throw new Exception ($"Invalid SizeX ({sizeX})!");
@@ -29,10 +29,10 @@ namespace Minesweeper.Ki.Masks
             Name   = name;
         }
 
-        public List <Coordinate> FindNullPointIntersections (KnownField field)
+        public List <Coordinate> FindUnknownPointIntersections (KnownField field)
         {
-            if (Values.Count (i => i == null) != 1)
-                throw new Exception ("Multiple Nullpoints!");
+            if (Values.Count (i => i == MaskValue.Unknown) != 1)
+                throw new Exception ("Invalid UnknownPoints count!");
 
             var fin = new List <Coordinate> ();
             for (var x = 0; x <= field.SizeX - SizeX; x++)
@@ -50,7 +50,7 @@ namespace Minesweeper.Ki.Masks
                             if (!Fits (maskValue, fieldValue.Value, field.GetRemainingCount (x + xI, y + yI)))
                                 goto cont;
 
-                            if (maskValue != null)
+                            if (maskValue != MaskValue.Unknown)
                                 continue;
                             xF = x + xI;
                             yF = y + yI;
@@ -64,11 +64,10 @@ namespace Minesweeper.Ki.Masks
             return fin;
         }
 
-        private static bool Fits (int? maskValue, KnownProperty fieldValue, int remainingCount) =>
-            !maskValue.HasValue && fieldValue == KnownProperty.Unknown ||
-            maskValue.HasValue &&
-            (maskValue.Value == -2 ||
-             maskValue.Value == -1 && fieldValue != KnownProperty.Unknown ||
-             maskValue.Value == remainingCount);
+        private static bool Fits (MaskValue maskValue, KnownProperty fieldValue, int remainingCount) =>
+            maskValue == MaskValue.Unknown && fieldValue == KnownProperty.Unknown ||
+            maskValue == MaskValue.Anything ||
+            maskValue == MaskValue.NotUnknown && fieldValue != KnownProperty.Unknown ||
+            (int) maskValue == remainingCount;
     }
 }

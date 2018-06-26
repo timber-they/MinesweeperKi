@@ -99,7 +99,7 @@ namespace Minesweeper.Ki
         private Coordinate GetSureFieldAtTwosOnEdge ()
         {
             var masks              = EdgeMasks.AllMasks;
-            var matchedCoordinates = masks.SelectMany (mask => mask.FindNullPointIntersections (this)).ToList ();
+            var matchedCoordinates = masks.SelectMany (mask => mask.FindUnknownPointIntersections (this)).ToList ();
 
             return matchedCoordinates.FirstOrDefault ();
         }

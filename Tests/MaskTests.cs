@@ -27,7 +27,7 @@ namespace Tests
             field.Set (2, 2, (KnownProperty) 1);
 
             var mask    = EdgeMasks.LeftTop;
-            var matches = mask.FindNullPointIntersections (field);
+            var matches = mask.FindUnknownPointIntersections (field);
 
             Assert.AreEqual (1, matches.Count);
         }
@@ -47,7 +47,7 @@ namespace Tests
             field.Set (2, 2, KnownProperty.Flagged);
 
             var masks   = EdgeMasks.AllMasks;
-            var matches = masks.SelectMany (mask => mask.FindNullPointIntersections (field));
+            var matches = masks.SelectMany (mask => mask.FindUnknownPointIntersections (field));
 
             Assert.AreEqual (0, matches.Count ());
         }

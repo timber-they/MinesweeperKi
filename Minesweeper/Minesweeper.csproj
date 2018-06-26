@@ -62,6 +62,7 @@
     <Compile Include="Ki\KnownProperty.cs" />
     <Compile Include="Ki\Masks\Mask.cs" />
     <Compile Include="Ki\Masks\EdgeMasks.cs" />
+    <Compile Include="Ki\Masks\MaskValue.cs" />
     <Compile Include="Ki\Solver.cs" />
     <Compile Include="ReferenceInt.cs" />
     <Compile Include="App.xaml.cs">
