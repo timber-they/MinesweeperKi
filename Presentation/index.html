@@ -49,14 +49,24 @@
             <section>
                 <h2></h2>
                 <img src="images/SaveFlagGolden.png">
+                <aside class="notes">
+                    Sicher
+                </aside>
             </section>
             <section>
                 <h2></h2>
                 <img src="images/FullGolden.PNG">
+                <aside class="notes">
+                    Voll
+                </aside>
             </section>
             <section>
                 <h2></h2>
                 <img src="images/EdgeGolden.PNG">
+                <aside class="notes">
+                    Kante<br>
+                    2 / 1
+                </aside>
             </section>
         </section>
         <section>
@@ -76,6 +86,7 @@
         dependencies: [
             {src: 'plugin/markdown/marked.js'},
             {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/mouse-pointer/mouse-pointer.js', async: true},
             {src: 'plugin/notes/notes.js', async: true},
             {
                 src: 'plugin/highlight/highlight.js', async: true, callback: function () {
