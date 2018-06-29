@@ -47,7 +47,7 @@ namespace Minesweeper.Game
 
         private Field Field { get; set; }
 
-        public MainWindow () => Init (25, 25);
+        public MainWindow () => Init (10, 10);
 
         public MainWindow (int sizeX, int sizeY) => Init (sizeX, sizeY);
 
@@ -123,7 +123,8 @@ namespace Minesweeper.Game
                         Background      = Brushes.DarkGray,
                         Tag             = C (xI, yI),
                         FontWeight      = FontWeights.Bold,
-                        ToolTip         = $"{xI}, {yI}"
+                        ToolTip         = $"{xI}, {yI}",
+                        FontSize = 20
                     };
 
                     button.Click              += ButtonOnClick;
