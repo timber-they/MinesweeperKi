@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Minesweeper.Ki;
 using Minesweeper.Ki.Masks;
@@ -29,7 +28,7 @@ namespace Tests
             var mask    = EdgeMasks.LeftTop;
             var matches = mask.FindUnknownPointIntersections (field);
 
-            Assert.AreEqual (1, matches.Count);
+            Assert.AreEqual (1, matches.Count ());
         }
 
         [Test]

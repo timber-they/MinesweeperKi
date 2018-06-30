@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 using Minesweeper.Game;
@@ -34,6 +33,9 @@ namespace Minesweeper.Ki
         public KnownProperty? Get (int i)
             => i < 0 || i >= Field.Count ? (KnownProperty?) null : Field [i];
 
+        /// <summary>
+        /// Evaluates the coordinates for the specified Index in the field
+        /// </summary>
         public Coordinate GetCoordinates (int i)
             => C (i % SizeX, i / SizeX);
 
@@ -43,47 +45,53 @@ namespace Minesweeper.Ki
             {
                 if ((int) Field [i] < 1)
                     continue;
+
                 var (x, y) = GetCoordinates (i);
                 var close = GetCloseFields (x, y);
+
                 var count = close.Count (property => property == KnownProperty.Flagged);
                 if (count == (int) Field [i])
                     yield return C (x, y);
             }
         }
 
-        public Coordinate FindSaveSpot ()
-        {
-            var fullClose = FindFullClose ();
-            foreach (var (x, y) in fullClose)
-            {
-                var closeFields = GetCloseFields (x, y);
-                for (var i = 0; i < closeFields.Count; i++)
-                    if (closeFields [i] == KnownProperty.Unknown)
-                        return GetCloseCoordinate (x, y, i);
-            }
-
-            return null;
-        }
-
-        public Coordinate FindSureSpot ()
+        private IEnumerable <Coordinate> FindBombsAtSurroundingCloses ()
         {
             for (var i = 0; i < Field.Count; i++)
             {
                 if ((int) Field [i] < 1)
                     continue;
+
                 var (x, y) = GetCoordinates (i);
-                var close         = GetCloseFields (x, y);
-                var unknownCount  = close.Count (property => property == KnownProperty.Unknown);
+                var close = GetCloseFields (x, y);
+
                 var flaggedCount  = close.Count (property => property == KnownProperty.Flagged);
                 var leftBombCount = (int) Field [i] - flaggedCount;
+
+                var unknownCount = close.Count (property => property == KnownProperty.Unknown);
                 if (unknownCount != leftBombCount)
                     continue;
+
+                yield return C (x, y);
+            }
+        }
+
+        public Coordinate FindSaveSpot () => GetFirstClosingUnknown (FindFullClose ());
+
+        public Coordinate FindSureSpot () =>
+            GetFirstClosingUnknown (FindBombsAtSurroundingCloses ()) ?? GetSureFieldAtTwosOnEdge ();
+
+        private Coordinate GetFirstClosingUnknown (IEnumerable <Coordinate> centers)
+        {
+            foreach (var (x, y) in centers)
+            {
+                var close = GetCloseFields (x, y);
                 for (var j = 0; j < close.Count; j++)
                     if (close [j] == KnownProperty.Unknown)
                         return GetCloseCoordinate (x, y, j);
             }
 
-            return GetSureFieldAtTwosOnEdge ();
+            return null;
         }
 
         public int GetRemainingCount (int x, int y)
@@ -99,7 +107,7 @@ namespace Minesweeper.Ki
         private Coordinate GetSureFieldAtTwosOnEdge ()
         {
             var masks              = EdgeMasks.AllMasks;
-            var matchedCoordinates = masks.SelectMany (mask => mask.FindUnknownPointIntersections (this)).ToList ();
+            var matchedCoordinates = masks.SelectMany (mask => mask.FindUnknownPointIntersections (this));
 
             return matchedCoordinates.FirstOrDefault ();
         }

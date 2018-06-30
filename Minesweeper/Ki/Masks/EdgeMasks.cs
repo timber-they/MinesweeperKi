@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 
 
 // ReSharper disable BadListLineBreaks
@@ -22,7 +21,6 @@ namespace Minesweeper.Ki.Masks
             MaskValue.Anything, (MaskValue) 2, MaskValue.NotUnknown,
             MaskValue.Unknown, MaskValue.NotUnknown, MaskValue.NotUnknown
         }, 3, nameof (LeftBottom));
-
         public static readonly Mask RightTop = new Mask (new List <MaskValue>
         {
             MaskValue.NotUnknown, MaskValue.NotUnknown, MaskValue.Unknown,
