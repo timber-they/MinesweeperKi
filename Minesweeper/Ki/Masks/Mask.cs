@@ -6,9 +6,6 @@ using System.Linq;
 using Minesweeper.Game;
 
 using static Minesweeper.Game.Coordinate;
-// ReSharper disable BadListLineBreaks
-// ReSharper disable BadListLineBreaks
-// ReSharper disable UnusedMember.Global
 
 
 namespace Minesweeper.Ki.Masks
@@ -62,13 +59,6 @@ namespace Minesweeper.Ki.Masks
                     cont:;
                 }
         }
-
-        public static readonly Mask LeftTop = new Mask (new List <MaskValue>
-        {
-            MaskValue.Unknown, MaskValue.NotUnknown, MaskValue.NotUnknown,
-            MaskValue.Anything, (MaskValue) 2, MaskValue.NotUnknown,
-            MaskValue.Anything, (MaskValue) 1, MaskValue.NotUnknown
-        }, 3, nameof (LeftTop));
 
         private static bool Fits (
             MaskValue     maskValue,
