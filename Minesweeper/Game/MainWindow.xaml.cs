@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -11,14 +14,12 @@ using Minesweeper.Ki;
 using static Minesweeper.Game.Coordinate;
 
 
-
-
 namespace Minesweeper.Game
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
         private Timer        Timer { get; set; }
         public  ReferenceInt Time;
@@ -69,6 +70,8 @@ namespace Minesweeper.Game
                                                Solver.TakeAction ();
                                            if (Time.Value != -1)
                                                TimeLabel.Content = $"{Time * 20} ms";
+
+                                           Debug.WriteLine ($"{InfoPanel.ActualWidth}px");
                                        }
                                    });
                                }, null, 50,
@@ -126,7 +129,7 @@ namespace Minesweeper.Game
                         Tag             = C (xI, yI),
                         FontWeight      = FontWeights.Bold,
                         ToolTip         = $"{xI}, {yI}",
-                        FontSize = 20
+                        FontSize        = 20
                     };
 
                     button.Click              += ButtonOnClick;
@@ -144,7 +147,7 @@ namespace Minesweeper.Game
                         BorderThickness = new Thickness (0),
                         Foreground      = Brushes.Black,
                         Content         = xI,
-                        Background      = Brushes.White
+                        Background      = Brushes.Transparent
                     };
 
                     Grid.Children.Add (labelX);
@@ -157,7 +160,7 @@ namespace Minesweeper.Game
                     BorderThickness = new Thickness (0),
                     Foreground      = Brushes.Black,
                     Content         = yI,
-                    Background      = Brushes.White
+                    Background      = Brushes.Transparent
                 };
 
                 Grid.Children.Add (labelY);
@@ -226,9 +229,11 @@ namespace Minesweeper.Game
 
         public void SetFlagCount (int count) => FlagLabel.Content = $"{count} flags";
 
-        private void ButtonOnClick (object sender, RoutedEventArgs e) => Solver.SetField ((Coordinate) ((Button) sender).Tag);
+        private void ButtonOnClick (object sender, RoutedEventArgs e) =>
+            Solver.SetField ((Coordinate) ((Button) sender).Tag);
 
-        private void ButtonOnMouseRightButtonUp (object sender, MouseButtonEventArgs e) => Solver.SetFlag ((Coordinate) ((Button) sender).Tag);
+        private void ButtonOnMouseRightButtonUp (object sender, MouseButtonEventArgs e) =>
+            Solver.SetFlag ((Coordinate) ((Button) sender).Tag);
 
         public IEnumerable <(Coordinate, LeftResult)> LeftClickOnField (int x, int y)
         {
@@ -240,6 +245,19 @@ namespace Minesweeper.Game
         {
             MadeFirstMove = true;
             return Field.SetFlag (x, y, this);
+        }
+
+        private void MainWindow_OnClosing (object sender, CancelEventArgs e)
+        {
+            Timer.Dispose ();
+        }
+
+        //300
+        private void MainWindow_OnLoaded (object sender, RoutedEventArgs e)
+        {
+            var max = Height - Grid.Margin.Top - Grid.Margin.Bottom;
+            Grid.Width = Math.Min (Width - 200 - InfoPanel.Margin.Left, max);
+            Grid.Height = Grid.Width;
         }
     }
 }

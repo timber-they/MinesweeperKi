@@ -6,16 +6,19 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Background="DarkSlateGray"
+        WindowStyle="None"
         WindowState="Maximized"
-        WindowStyle="None">
+        Closing="MainWindow_OnClosing"
+        Loaded="MainWindow_OnLoaded">
     <StackPanel Orientation="Horizontal">
         <Grid Name="Grid"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
               UseLayoutRounding="True"
               Height="700"
-              Width="700" />
-        <StackPanel Orientation="Vertical" Margin="100,200,100,100">
+              Width="700"
+              Margin="10,10,10,10"/>
+        <StackPanel Orientation="Vertical" Margin="100,200,0,0" Name="InfoPanel">
             <Label Name="TimeLabel" Foreground="White" FontSize="40" />
             <Label Name="FlagLabel" Foreground="White" FontSize="40" />
         </StackPanel>
