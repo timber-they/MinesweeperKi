@@ -16,6 +16,9 @@
 
         public static ReferenceInt operator ++ (ReferenceInt value) => new ReferenceInt (value.Value + 1);
 
+        public static ReferenceInt operator + (ReferenceInt value, int addition) =>
+            new ReferenceInt (value.Value + addition);
+
         public static bool operator == (ReferenceInt value, int comparison) => value?.Value == comparison;
 
         public static bool operator != (ReferenceInt value, int comparison) => value?.Value != comparison;

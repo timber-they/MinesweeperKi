@@ -23,6 +23,8 @@ namespace Minesweeper.Game
         private Timer        Timer { get; set; }
         public  ReferenceInt Time;
 
+        private bool MadeFirstMove { get; set; }
+
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
 
@@ -57,7 +59,8 @@ namespace Minesweeper.Game
                                {
                                    if (Time == -1)
                                        return;
-                                   Time++;
+                                   if (MadeFirstMove)
+                                       Time++;
                                    TimeLabel.Dispatcher.Invoke (() =>
                                    {
                                        lock (Time)
@@ -89,6 +92,8 @@ namespace Minesweeper.Game
 
         public void SetSize (int x, int y)
         {
+            MadeFirstMove = false;
+
             SizeX = x;
             SizeY = y;
 
@@ -221,14 +226,20 @@ namespace Minesweeper.Game
 
         public void SetFlagCount (int count) => FlagLabel.Content = $"{count} flags";
 
-        private void ButtonOnClick (object sender, RoutedEventArgs e) =>
-            Solver.SetField ((Coordinate) ((Button) sender).Tag);
+        private void ButtonOnClick (object sender, RoutedEventArgs e) => Solver.SetField ((Coordinate) ((Button) sender).Tag);
 
-        private void ButtonOnMouseRightButtonUp (object sender, MouseButtonEventArgs e) =>
-            Solver.SetFlag ((Coordinate) ((Button) sender).Tag);
+        private void ButtonOnMouseRightButtonUp (object sender, MouseButtonEventArgs e) => Solver.SetFlag ((Coordinate) ((Button) sender).Tag);
 
-        public IEnumerable <(Coordinate, LeftResult)> LeftClickOnField (int x, int y) => Field.OpenField (x, y, this);
+        public IEnumerable <(Coordinate, LeftResult)> LeftClickOnField (int x, int y)
+        {
+            MadeFirstMove = true;
+            return Field.OpenField (x, y, this);
+        }
 
-        public RightResult RightClickOnField (int x, int y) => Field.SetFlag (x, y, this);
+        public RightResult RightClickOnField (int x, int y)
+        {
+            MadeFirstMove = true;
+            return Field.SetFlag (x, y, this);
+        }
     }
 }
