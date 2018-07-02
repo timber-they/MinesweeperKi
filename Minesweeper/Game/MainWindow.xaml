@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Background="DarkSlateGray"
-        WindowSate="Maximized">
+        WindowState="Maximized">
     <StackPanel Orientation="Horizontal">
         <Grid Name="Grid"
               HorizontalAlignment="Stretch"
