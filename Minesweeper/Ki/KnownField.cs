@@ -55,7 +55,7 @@ namespace Minesweeper.Ki
             }
         }
 
-        private IEnumerable <Coordinate> FindBombsAtSurroundingCloses ()
+       private IEnumerable <Coordinate> FindBombsAtSurroundingCloses ()
         {
             for (var i = 0; i < Field.Count; i++)
             {

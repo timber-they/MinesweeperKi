@@ -74,7 +74,32 @@
             <section></section>
             <section>
                 <h2></h2>
-                <img src="images/SureCodeGolden.PNG">
+                <img src="images/SureCodeGolden.PNG" id="SureImage"
+                     onerror="console.log('Image not found - using highlighting instead!');
+                              document.getElementById('SureImage').setAttribute('style', 'display: none;');
+                              document.getElementById('SureCode').setAttribute('style', 'display: block;');">
+                <pre style="display: none;" id="SureCode">
+                    <code class="cs" style="font-size: 16px">private IEnumerable&lt;LeftCoordinate&gt; FindBombsAtSurroundingCloses ()
+{
+    for (var i = 0; i &lt; Field.Count; i++)
+    {
+        if ((int) Field [i] &lt; 1)
+            continue;
+
+        var (x, y) = GetCoordinates (i);
+        var close = GetCloseFields (x, y);
+
+        var flaggedCount = close.Count (property =&gt; property == KnownProperty.Flagged);
+        var leftBombCount = (int) Field [i] - flaggedCount;
+
+        var unknownCount = close.Count (property =&gt; property == KnownProperty.Unknown);
+        if (unknownCount != leftBombCount)
+            continue;
+
+        yield return C (x, y);
+    }
+}</code>
+                </pre>
                 <aside class="notes">
                     Felder, angrenzende Bombe<br>
                     Flaggen<br>
@@ -84,7 +109,27 @@
             </section>
             <section>
                 <h2></h2>
-                <img src="images/FullCloseCodeGolden.PNG">
+                <img src="images/FullCloseCodeGolden.PNG" id="FullImage"
+                     onerror="console.log('Image not found - using highlighting instead!');
+                              document.getElementById('FullImage').setAttribute('style', 'display: none;');
+                              document.getElementById('FullCode').setAttribute('style', 'display: block;');">
+                <pre style="display: none;" id="FullCode">
+                    <code class="cs" style="font-size: 16px">private IEnumerable &lt;Coordinate&gt; FindFullClose ()
+{
+    for (var i = 0; i &lt; Field.Count; i++)
+    {
+        if ((int) Field [i] &gt; 1)
+            continue;
+
+        var (x, y) = GetCoordinates (i);
+        var close = GetCloseFields (x, y);
+
+        var count = close.Count (property =&gt; property == KnownProperty.Flagged);
+        if (count == (int) Field [i])
+            yield return C (x, y);
+    }
+}</code>
+                </pre>
                 <aside class="notes">
                     Felder, angrenzende Bombe<br>
                     Flaggen, angrenzenden
@@ -92,7 +137,27 @@
             </section>
             <section>
                 <h2></h2>
-                <img src="images/MaskCodeGolden.PNG">
+                <img src="images/MaskCodeGolden.PNG" id="MaskImage"
+                     onerror="console.log('Image not found - using highlighting instead!');
+                              document.getElementById('MaskImage').setAttribute('style', 'display: none;');
+                              document.getElementById('MaskCode').setAttribute('style', 'display: block;');">
+                <pre style="display: none;" id="MaskCode">
+                    <code class="cs" style="font-size: 16px">public static readonly Mask LeftTop = new Mask (new List&lt;MaskValue&gt;
+{
+    MaskValue.Unknown, MaskValue.NotUnknown, MaskValue.NotUnknown,
+    MaskValue.Anything, (MaskValue) 2, MaskValue.NotUnknown,
+    MaskValue.Anything, (MaskValue) 1, MaskValue.NotUnknown
+}, 3, nameof (LeftTop));
+
+private static bool Fits (
+    MaskValue     maskValue,
+    KnownProperty fieldValue,
+    int           remainingCount)
+    => maskValue == MaskValue.Unknown && fieldValue == KnownProperty.Unknown ||
+       maskValue == MaskValue.Anything ||
+       maskValue == MaskValue.NotUnknown && fieldValue != KnownProperty.Unknown ||
+       (int) maskValue == remainingCount;</code>
+                </pre>
                 <aside class="notes">
                     Komplizierter<br>
                     Masken, Stil<br>
