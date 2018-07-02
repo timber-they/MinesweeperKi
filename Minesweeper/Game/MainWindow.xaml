@@ -12,8 +12,8 @@
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
               UseLayoutRounding="True"
-              Height="700"
-              Width="700" />
+              Height="1000"
+              Width="1000" />
         <StackPanel Orientation="Vertical" Margin="100,200,100,100">
             <Label Name="TimeLabel" Foreground="White" FontSize="40" />
             <Label Name="FlagLabel" Foreground="White" FontSize="40" />

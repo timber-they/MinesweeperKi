@@ -82,7 +82,7 @@ namespace Minesweeper.Game
                     Solver.TakeAction ();
                     break;
                 case Key.Escape:
-                    Solving = true;
+                    Solving = !Solving;
                     break;
             }
         }
