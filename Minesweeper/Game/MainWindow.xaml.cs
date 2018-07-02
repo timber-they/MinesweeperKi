@@ -11,7 +11,6 @@ using Minesweeper.Ki;
 using static Minesweeper.Game.Coordinate;
 
 
-// ReSharper disable UnusedMember.Global
 
 
 namespace Minesweeper.Game
@@ -21,7 +20,6 @@ namespace Minesweeper.Game
     /// </summary>
     public partial class MainWindow
     {
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private Timer        Timer { get; set; }
         public  ReferenceInt Time;
 
