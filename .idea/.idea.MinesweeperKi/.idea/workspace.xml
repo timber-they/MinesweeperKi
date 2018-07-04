@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9b506c70-41db-498d-9eae-86874d5fd8e8" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="MainWindow.xaml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Minesweeper/Game/MainWindow.xaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+              <folding>
+                <marker date="1530533239601" expanded="true" signature="0:961" ph="&lt;&lt;StackPanel Orientation=&quot;Horizontal&quot;&gt;&#10;        &lt;Grid Name=&quot;Grid&quot;&#10;              HorizontalAlignment=&quot;Stretch&quot;&#10;              VerticalAlignment=&quot;Stretch&quot;&#10;              UseLayoutRounding=&quot;True&quot;&#10;              Height=&quot;700&quot;&#10;              Width=&quot;700&quot; /&gt;&#10;        &lt;StackPanel Orientation=&quot;Vertical&quot; Margin=&quot;100,200,100,100&quot;&gt;&#10;            &lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;            &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;        &lt;/StackPanel&gt;&#10;    &lt;/StackPanel&gt;.../&gt;" />
+                <marker date="1530533239601" expanded="true" signature="454:951" ph="&lt;&lt;Grid Name=&quot;Grid&quot;&#10;              HorizontalAlignment=&quot;Stretch&quot;&#10;              VerticalAlignment=&quot;Stretch&quot;&#10;              UseLayoutRounding=&quot;True&quot;&#10;              Height=&quot;700&quot;&#10;              Width=&quot;700&quot; /&gt; &lt;StackPanel Orientation=&quot;Vertical&quot; Margin=&quot;100,200,100,100&quot;&gt;&#10;            &lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;            &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;        &lt;/StackPanel&gt;.../&gt;" />
+                <marker date="1530533239601" expanded="true" signature="500:698" ph="&lt;.../&gt;" />
+                <marker date="1530533239601" expanded="true" signature="707:933" ph="&lt;&lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt; &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;.../&gt;" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RightResult.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Minesweeper/Game/RightResult.cs">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Minesweeper/Game/MainWindow.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Minesweeper/Game/RightResult.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Minesweeper/Game/MainWindow.xaml" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="65" />
+    <option name="y" value="-4" />
+    <option name="width" value="1301" />
+    <option name="height" value="772" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="SolutionExplorer" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="SolutionExplorer">
+        <subPane>
+          <expand>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="MinesweeperKi (2 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <option name="show-file-system" value="false" />
+        <option name="show-all-items" value="false" />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Rider.ProjectViewActivator.IsNotFirstRun" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Default" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="PROJECT_PATH" value="" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="None" />
+      <option name="PROJECT_TFM" value="" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9b506c70-41db-498d-9eae-86874d5fd8e8" name="Default" comment="" />
+      <created>1530445953020</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1530445953020</updated>
+      <workItem from="1530445954988" duration="624000" />
+      <workItem from="1530530108820" duration="417000" />
+      <workItem from="1530533185860" duration="242000" />
+    </task>
+    <task id="LOCAL-00001" summary="Smaller screen adjustments">
+      <created>1530530497519</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1530530497520</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Maximized window state">
+      <created>1530533392809</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1530533392809</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1283000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1366" height="740" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Errors In Solution" order="3" />
+      <window_info active="true" anchor="bottom" id="Event Log" order="7" side_tool="true" visible="true" />
+      <window_info anchor="bottom" id="Unit Tests" order="7" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="bottom" id="NuGet" order="7" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18712121" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Smaller screen adjustments" />
+    <MESSAGE value="Maximized window state" />
+    <option name="LAST_COMMIT_MESSAGE" value="Maximized window state" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Minesweeper/Game/MainWindow.xaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="64" selection-start-line="15" selection-start-column="64" selection-end-line="15" selection-end-column="64" />
+          <folding>
+            <marker date="1530533239601" expanded="true" signature="0:961" ph="&lt;&lt;StackPanel Orientation=&quot;Horizontal&quot;&gt;&#10;        &lt;Grid Name=&quot;Grid&quot;&#10;              HorizontalAlignment=&quot;Stretch&quot;&#10;              VerticalAlignment=&quot;Stretch&quot;&#10;              UseLayoutRounding=&quot;True&quot;&#10;              Height=&quot;700&quot;&#10;              Width=&quot;700&quot; /&gt;&#10;        &lt;StackPanel Orientation=&quot;Vertical&quot; Margin=&quot;100,200,100,100&quot;&gt;&#10;            &lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;            &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;        &lt;/StackPanel&gt;&#10;    &lt;/StackPanel&gt;.../&gt;" />
+            <marker date="1530533239601" expanded="true" signature="454:951" ph="&lt;&lt;Grid Name=&quot;Grid&quot;&#10;              HorizontalAlignment=&quot;Stretch&quot;&#10;              VerticalAlignment=&quot;Stretch&quot;&#10;              UseLayoutRounding=&quot;True&quot;&#10;              Height=&quot;700&quot;&#10;              Width=&quot;700&quot; /&gt; &lt;StackPanel Orientation=&quot;Vertical&quot; Margin=&quot;100,200,100,100&quot;&gt;&#10;            &lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;            &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;        &lt;/StackPanel&gt;.../&gt;" />
+            <marker date="1530533239601" expanded="true" signature="500:698" ph="&lt;.../&gt;" />
+            <marker date="1530533239601" expanded="true" signature="707:933" ph="&lt;&lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt; &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Minesweeper/Game/RightResult.cs">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Minesweeper/Game/RightResult.cs">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Minesweeper/Game/MainWindow.xaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+          <folding>
+            <marker date="1530533239601" expanded="true" signature="0:961" ph="&lt;&lt;StackPanel Orientation=&quot;Horizontal&quot;&gt;&#10;        &lt;Grid Name=&quot;Grid&quot;&#10;              HorizontalAlignment=&quot;Stretch&quot;&#10;              VerticalAlignment=&quot;Stretch&quot;&#10;              UseLayoutRounding=&quot;True&quot;&#10;              Height=&quot;700&quot;&#10;              Width=&quot;700&quot; /&gt;&#10;        &lt;StackPanel Orientation=&quot;Vertical&quot; Margin=&quot;100,200,100,100&quot;&gt;&#10;            &lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;            &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;        &lt;/StackPanel&gt;&#10;    &lt;/StackPanel&gt;.../&gt;" />
+            <marker date="1530533239601" expanded="true" signature="454:951" ph="&lt;&lt;Grid Name=&quot;Grid&quot;&#10;              HorizontalAlignment=&quot;Stretch&quot;&#10;              VerticalAlignment=&quot;Stretch&quot;&#10;              UseLayoutRounding=&quot;True&quot;&#10;              Height=&quot;700&quot;&#10;              Width=&quot;700&quot; /&gt; &lt;StackPanel Orientation=&quot;Vertical&quot; Margin=&quot;100,200,100,100&quot;&gt;&#10;            &lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;            &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;&#10;        &lt;/StackPanel&gt;.../&gt;" />
+            <marker date="1530533239601" expanded="true" signature="500:698" ph="&lt;.../&gt;" />
+            <marker date="1530533239601" expanded="true" signature="707:933" ph="&lt;&lt;Label Name=&quot;TimeLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt; &lt;Label Name=&quot;FlagLabel&quot; Foreground=&quot;White&quot; FontSize=&quot;40&quot; /&gt;.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

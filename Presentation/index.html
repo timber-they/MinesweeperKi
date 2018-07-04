@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/theme/beige.css">
 
     <!-- Theme used for syntax highlighting of code -->
-    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="lib/css/atom-one-light.css">
     <link rel="stylesheet" href="Style.css">
 
     <!-- Printing and PDF exports -->
@@ -91,13 +91,10 @@
     {
         if ((int) Field [i] &lt; 1)
             continue;
-
         var (x, y) = GetCoordinates (i);
         var close = GetCloseFields (x, y);
-
         var flaggedCount = close.Count (property =&gt; property == KnownProperty.Flagged);
         var leftBombCount = (int) Field [i] - flaggedCount;
-
         var unknownCount = close.Count (property =&gt; property == KnownProperty.Unknown);
         if (unknownCount != leftBombCount)
             continue;
@@ -159,9 +156,9 @@ private static bool Fits (
     MaskValue     maskValue,
     KnownProperty fieldValue,
     int           remainingCount)
-    => maskValue == MaskValue.Unknown && fieldValue == KnownProperty.Unknown ||
+    =&gt; maskValue == MaskValue.Unknown &amp;&amp; fieldValue == KnownProperty.Unknown ||
        maskValue == MaskValue.Anything ||
-       maskValue == MaskValue.NotUnknown && fieldValue != KnownProperty.Unknown ||
+       maskValue == MaskValue.NotUnknown &amp;&amp; fieldValue != KnownProperty.Unknown ||
        (int) maskValue == remainingCount;</code>
                 </pre>
                 <aside class="notes">
@@ -196,7 +193,9 @@ private static bool Fits (
 
 <script>
     Reveal.initialize({
-        dependencies: [
+	height: '90%',
+	width: '90%', 
+	dependencies: [
             {src: 'plugin/markdown/marked.js'},
             {src: 'plugin/markdown/markdown.js'},
             {src: 'plugin/mouse-pointer/mouse-pointer.js', async: true},
