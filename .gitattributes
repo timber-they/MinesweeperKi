@@ -1,1 +1,6 @@
-Presentation/* linguist-vendored
+Presentation/css/* linguist-vendored
+Presentation/js/* linguist-vendored
+Presentation/lib/* linguist-vendored
+Presentation/plugin/* linguist-vendored
+Presentation/test/* linguist-vendored
+Presentation/demo.html linguist-vendored
